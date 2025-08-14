@@ -28,13 +28,14 @@
     /* Отключаем клики для печатной версии */
     a, button { pointer-events:none; cursor:default; text-decoration:none; }
 
-    html, body { height:100%; background: White; }
+    html, body { height:100%; background: var(--bg); }
     body {
       margin:0; color:var(--fg);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, Segoe UI, Roboto, Helvetica Neue, Arial, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       letter-spacing:.2px; display:grid; place-items:start; justify-content:center;
-      gap:12mm; padding:12mm 0; /* отступ вокруг страниц на экране */
+      gap:12mm;
+      padding:12mm 0 30mm; /* 30 мм пустого места снизу */
     }
 
     /* A5 для предпросмотра на экране */
@@ -93,33 +94,37 @@
     /* === Pakete: одинаковая ширина и высота карточек === */
     .prices{
       display:grid;
-      grid-template-columns:repeat(4, minmax(0, 1fr)); /* фикс ширины колонок */
+      grid-template-columns:repeat(4, minmax(0, 1fr));
       gap:3mm;
       align-items:stretch;
       justify-items:stretch;
     }
     .price{
-      width:100%;                              /* растягиваемся по колонке */
+      width:100%;
       background:#0f1013;
       border:0.4mm solid #232428;
       border-radius:4mm;
       padding:3mm;
       display:grid;
       gap:1.6mm;
-      grid-template-rows:auto auto 1fr;        /* tag, title, список */
-      min-height:42mm;                         /* одинаковая высота */
+      grid-template-rows:auto auto 1fr;
+      min-height:42mm;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      overflow: hidden;
     }
     .price .p-tag{
       display:inline-block; font-weight:800; font-size:3.5mm;
       color:#000; background:linear-gradient(180deg,#ffd54d,#f6c62a);
       padding:1.6mm 2.8mm; border-radius:999px;
-      white-space:nowrap;                      /* не ломаем цену */
+      white-space:nowrap;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    /* Tiny print line */
     .fine{ font-size:3mm; color:#aeb1b7; }
 
-    /* === Компактные правки задней стороны === */
     .back .safe{ inset:5mm; gap:2.4mm; }
     .back h2{ font-size:5mm; }
     .back h3{ font-size:3.8mm; }
@@ -129,12 +134,14 @@
     .back .step{ padding:2.4mm; gap:1.2mm; }
     .back .step .num{ width:5.4mm; height:5.4mm; font-size:3.2mm; }
 
-    /* Mini price overview — одинаковые размеры + читабельный текст */
     .back .prices{ grid-template-columns:repeat(4, minmax(0, 1fr)); gap:2.2mm; }
     .back .price{
       padding:2.4mm; gap:1.2mm;
       grid-template-rows:auto auto 1fr;
       min-height:42mm;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      overflow: hidden;
     }
     .back .price .p-tag{ font-size:3.2mm; padding:1.2mm 2.2mm; }
     .back .price h3{ font-size:3.6mm; }
@@ -142,6 +149,14 @@
       font-size:3.2mm; line-height:1.35; color:var(--muted);
       margin:0; padding-left:4mm;
       align-self:stretch;
+    }
+
+    .price h3,
+    .price ul,
+    .price li{
+      max-width:100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .back .cta-block{ padding:mm; }
@@ -360,6 +375,5 @@
 
     </div>
   </section>
-
 </body>
 </html>
