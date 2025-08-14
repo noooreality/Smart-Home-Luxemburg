@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Business Card · Smart Home Trier (Print)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <style>
+    /* =============================
+       BUSINESS CARD 85 × 55 mm
+       Дизайн в стиле вашего A5-флаера
+       ============================= */
+    :root{
+      /* Палитра из флаера */
+      --bg:#000;
+      --bg-elev:#0b0b0c;
+      --fg:#f5f5f7;
+      --muted:#9aa0a6;
+      --gold:#ffd54d;
+      --accent:#60a5fa;
+      --accent2:#7dd3fc;
+      --stroke:#1a1a1c;
+
+      /* Геометрия карты */
+      --card-w:85mm;
+      --card-h:55mm;
+      --radius:6mm;     /* скругление холдера в превью (не печать) */
+      --safe:3mm;       /* безопасное поле со всех сторон */
+      --bleed:5mm;      /* вылеты (0–3 мм при необходимости типографии) */
+    }
+
+    /* Базовая типографика */
+    *,*::before,*::after{ box-sizing:border-box; }
+    a, button { pointer-events:none; cursor:default; text-decoration:none; }
+    html, body { height:100%; background:white; }
+    body{
+      margin:0; color:var(--fg);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,Segoe UI,Roboto,"Helvetica Neue",Arial,system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      letter-spacing:.2px;
+      display:grid; place-items:start; justify-content:center; gap:10mm;
+      padding:10mm 0; /* отступ вокруг страниц на экране */
+    }
+
+    /* Страница-визитка с учётом вылетов */
+    .page{
+      width:calc(var(--card-w) + 2*var(--bleed));
+      height:calc(var(--card-h) + 2*var(--bleed));
+      background:var(--bg);
+      border:1px solid #222;        /* только для экрана */
+      position:relative; overflow:hidden;
+      border-radius:var(--radius);  /* только превью */
+    }
+    .safe{
+      position:absolute;
+      inset:calc(var(--safe) + var(--bleed));
+      display:grid; gap:2.4mm;
+    }
+
+    /* Печать */
+    @page{ size: calc(85mm + 2*var(--bleed)) calc(55mm + 2*var(--bleed)); margin:0; }
+    @media print{
+      body{ display:block; padding:0; background:transparent; }
+      .page{ width:auto; height:auto; border:0; page-break-after:always; }
+      .page:last-child{ page-break-after:auto; }
+    }
+
+    /* Атомы/шрифты в мм */
+    .row{ display:flex; gap:2mm; align-items:center; }
+    .col{ display:grid; gap:1.8mm; }
+    h1{ margin:0; font-size:6.4mm; line-height:1.05; }
+    h2{ margin:0; font-size:4mm; }
+    h3{ margin:0; font-size:3.4mm; }
+    p{ margin:0; font-size:3.2mm; line-height:1.3; color:var(--fg); }
+    .muted{ color:var(--muted); }
+
+    .tag{ display:inline-block; font-weight:800; padding:1.2mm 2.4mm; border-radius:999px; border:0.3mm solid rgba(255,213,77,.45); color:#ffe28b; background:rgba(255,213,77,.08); font-size:2.8mm; }
+    .chip{ display:inline-block; padding:1mm 2.2mm; border-radius:999px; border:0.3mm solid #2a2a2d; background:#0f0f12; color:#d8dae0; font-size:2.8mm; }
+    .hr{ height:0; border:0; border-top:0.35mm solid #232428; margin:1.8mm 0; }
+
+    .logo{ display:flex; align-items:center; gap:2.2mm; font-weight:800; }
+    .logo svg{ width:6mm; height:6mm; }
+
+    .panel{
+      background:var(--bg-elev);
+      border:0.35mm solid var(--stroke);
+      border-radius:4mm;
+      padding:2.6mm;
+    }
+
+    .cta{ display:grid; gap:1.2mm; }
+    .cta-line{ display:flex; gap:2mm; align-items:center; font-weight:700; font-size:3.1mm; }
+
+    .qr{
+      width:16mm; height:16mm; border-radius:2mm;
+      border:0.4mm solid #2a2a2d; background:conic-gradient(from 0deg,#111,#333);
+      display:grid; place-items:center; font-size:2.4mm; color:#bbb;
+    }
+
+    /* Разметка лицевой стороны */
+    .front .safe{
+      grid-template-rows:auto 1fr auto;
+    }
+    .nameblock h1{ font-size:6.2mm; }
+    .nameblock .role{ font-size:3.2mm; color:var(--muted); font-weight:600; }
+
+    /* Разметка оборота */
+    .back .safe{
+      grid-template-rows:auto 1fr;
+    }
+    .services{ display:flex; flex-wrap:wrap; gap:1.6mm; }
+    .foot{ display:flex; align-items:flex-end; justify-content:space-between; }
+
+    /* Декорные линии/градиенты как во флаере */
+    .glow{
+      position:absolute; inset:-20%;
+      background: radial-gradient(60mm 60mm at 20% 10%, rgba(96,165,250,.15), transparent 60%),
+                  radial-gradient(80mm 80mm at 90% 80%, rgba(255,213,77,.12), transparent 60%);
+      pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============== ЛИЦЕВАЯ СТОРОНА ============== -->
+  <section class="page front" aria-label="Visitenkarte Vorderseite">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="safe">
+      <!-- Шапка -->
+      <div class="row" style="justify-content:space-between;">
+        <div class="logo">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M6 22 L24 8 L42 22" stroke="#ffd54d" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="14" y="22" width="20" height="16" rx="4" stroke="#8fb7ff" stroke-width="2"/>
+            <circle cx="24" cy="30" r="2.4" fill="#ffd54d" />
+          </svg>
+          <div>
+            <div style="font-size:4mm; line-height:1;">Smart Home Trier</div>
+            <div class="muted" style="font-size:3mm;">Luxemburg · Trier & Umgebung</div>
+          </div>
+        </div>
+        <span class="tag">Kontakt</span>
+      </div>
+
+      <!-- Имя / должность -->
+      <div class="nameblock">
+        <h1>Niklas Schütz</h1>
+        <div class="role">Geschäftsführer · Smart-Home-Planung & Installation</div>
+      </div>
+
+      <!-- Контакты -->
+      <div class="panel">
+        <div class="cta">
+          <div class="cta-line">📞 <span>+49 ··· ··· ···</span></div>
+          <div class="cta-line">✉️ <span>info@smarthome-trier.de</span></div>
+          <div class="cta-line">🌐 <span>smarthome-trier.de</span></div>
+          <div class="cta-line">📍 <span>Trier, Rheinland-Pfalz</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ОБОРОТНАЯ СТОРОНА ============== -->
+  <section class="page back" aria-label="Visitenkarte Rückseite">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="safe">
+      <!-- Лого + слоган -->
+      <div class="row" style="justify-content:space-between; align-items:center;">
+        <div class="logo">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M6 22 L24 8 L42 22" stroke="#ffd54d" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="14" y="22" width="20" height="16" rx="4" stroke="#8fb7ff" stroke-width="2"/>
+            <circle cx="24" cy="30" r="2.4" fill="#ffd54d" />
+          </svg>
+          <div>
+            <div style="font-size:4mm; line-height:1;">Smart Home Trier</div>
+            <div class="muted" style="font-size:3mm;">Komfort · Sicherheit · Ersparnis</div>
+          </div>
+        </div>
+        <div class="qr" aria-label="QR-Platzhalter">QR</div>
+      </div>
+
+      <!-- Услуги / фишки (стиль чипов из флаера) -->
+      <div class="panel">
+        <div class="services" aria-label="Leistungsschwerpunkte">
+          <span class="chip">💡 Beleuchtung</span>
+          <span class="chip">🔥 Klima & Heizung</span>
+          <span class="chip">🛡️ Sicherheit</span>
+          <span class="chip">🔁 Automationen</span>
+          <span class="chip">🎙️ Sprachsteuerung</span>
+          <span class="chip">📱 App-Steuerung</span>
+        </div>
+        <div class="hr"></div>
+        <p class="muted" style="font-size:3mm;">
+          Unverbindliche Erstberatung · Region Trier & Luxemburg-Grenzraum
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
